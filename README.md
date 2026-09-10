@@ -22,6 +22,33 @@ npm run seed
 
 Demo accounts: `employer@demo.com` and `candidate@demo.com`, both using password `Orbitwork2026!` after seeding.
 
+New users can select **Candidate** or **Employer** on the registration screen. A fresher should register as a Candidate, then browse open roles and submit applications.
+
+## Deploy Online
+
+This is a two-service MERN app. Deploy the API first on Render and the React client on Netlify or Vercel. Streamlit is not suitable for this React/Express application.
+
+### 1. Deploy the API on Render
+
+1. Push this repository to GitHub.
+2. In Render, choose **New > Blueprint** and select the repository. Render will detect `render.yaml`.
+3. Set the service environment variables:
+	- `MONGO_URI`: your MongoDB Atlas URI
+	- `JWT_SECRET`: a new long random secret, never the example value
+	- `CLIENT_URL`: the final Netlify/Vercel URL (temporarily use the frontend URL after step 2)
+4. Deploy and verify `https://YOUR-API.onrender.com/api/health` returns `{ "status": "ok" }`.
+5. Seed once from a local terminal using the same production `MONGO_URI`, or create the demo data before deployment.
+
+### 2. Deploy the client on Netlify
+
+1. Choose **Add new site > Import an existing project** and select the repository.
+2. Set the base directory to `client`.
+3. Netlify reads `client/netlify.toml`; build command is `npm run build` and publish directory is `dist`.
+4. Add `VITE_API_URL=https://YOUR-API.onrender.com` in the site environment variables.
+5. Deploy, copy the Netlify URL, then set that URL as `CLIENT_URL` in Render and redeploy the API.
+
+Vercel also works: select the `client` directory as the project root, set `VITE_API_URL` to the Render API URL, and deploy with the default Vite settings.
+
 ## Roles and Lifecycle
 
 - **Employer** accounts publish, edit, close, and delete only their own jobs. They can inspect applicants for their jobs and move applications through Pending, Reviewed, Accepted, and Rejected.
