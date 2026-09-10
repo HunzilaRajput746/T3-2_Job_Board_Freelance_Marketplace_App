@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "node server.js",
     "server": "node --watch server.js",
     "client": "npm --prefix client run dev",
     "seed": "node seed.js",

@@ -6,7 +6,14 @@ const connectDB = require('./config/db');
 
 const app = express();
 connectDB();
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+const allowedOrigins = new Set([process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:5174'].filter(Boolean));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+    callback(new Error('Origin is not allowed by CORS'));
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 
